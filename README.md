@@ -21,14 +21,14 @@ database with 14 tables and 85,000+ trip records.
 - **RTE00010** has a **-609% margin** — pricing or data quality issue
 
 ## Project Structure
-logistics-analysis/
-├── data/          ← raw CSV files (14 tables)
-├── notebooks/     ← Jupyter notebooks
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_cleaning.ipynb
-│   └── 03_analysis.ipynb
-├── exports/       ← clean CSVs and charts
-└── README.md
+
+| Folder / File | Description |
+|---|---|
+| `data/` | Raw CSV files — 14 tables |
+| `notebooks/01_data_exploration.ipynb` | Load all 14 tables, check nulls, verify FK relationships |
+| `notebooks/02_cleaning.ipynb` | Fix nulls, convert data types, export clean CSVs |
+| `notebooks/03_analysis.ipynb` | Driver performance, route profitability, fleet health |
+| `exports/` | Clean CSVs and chart PNGs |
 
 ## Notebooks
 | Notebook | Description |
