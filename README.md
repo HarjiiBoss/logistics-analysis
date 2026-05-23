@@ -20,7 +20,7 @@ database with 14 tables and 85,000+ trip records.
 - Most profitable route **RTE00044** delivers **85.3%** profit margin
 - **TRK00040** has highest maintenance cost at **$0.06/mile**
 - Total fleet maintenance spend: **$5.7M**
-- **RTE00010** has a **-609% margin** — pricing or data quality issue
+- **RTE00010** has a negative **609% margin** — pricing or data quality issue
 
 ## Project Structure
 
