@@ -1,5 +1,7 @@
 # Logistics Operations Analysis
 
+![Dashboard](dashboard/dashboard_preview.png)
+
 A full end-to-end data analysis capstone project on a logistics operations 
 database with 14 tables and 85,000+ trip records.
 
