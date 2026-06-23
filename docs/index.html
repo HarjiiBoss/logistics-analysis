@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Taofeek Salami — Logistics Operations Performance Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #13161e;
+      --surface2: #1a1e28;
+      --border: #252a38;
+      --accent: #c8a96e;
+      --accent2: #7eb8c9;
+      --text: #e8e4dc;
+      --muted: #7a7f8e;
+      --green: #6dbf8a;
+      --red: #e07b6a;
+      --purple: #b48ecf;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── HERO ── */
+    header {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 8vw 4rem;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: -5%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(126,184,201,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    h1 .accent { color: var(--accent); }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .meta-item { display: flex; flex-direction: column; gap: 0.2rem; }
+
+    .meta-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .meta-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    .hero-bio {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.35s ease both;
+    }
+
+    .badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      border: 1px solid;
+    }
+
+    .badge-python  { color: var(--accent2); border-color: rgba(126,184,201,0.3); background: rgba(126,184,201,0.07); }
+    .badge-tableau { color: #e8a87c;        border-color: rgba(232,168,124,0.3); background: rgba(232,168,124,0.07); }
+    .badge-pandas  { color: var(--accent);  border-color: rgba(200,169,110,0.3); background: rgba(200,169,110,0.07); }
+    .badge-complete{ color: var(--green);   border-color: rgba(109,191,138,0.3); background: rgba(109,191,138,0.07); }
+
+    .hero-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+
+    .hero-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .hero-link::before { content: '→'; color: var(--accent); }
+    .hero-link:hover { color: var(--accent); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 8vw;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      animation: fadeUp 0.6s 0.6s ease both;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--muted);
+    }
+
+    /* ── LAYOUT ── */
+    main { position: relative; z-index: 1; }
+    section { padding: 5rem 8vw; border-top: 1px solid var(--border); }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      line-height: 1.2;
+    }
+
+    /* ── KPI GRID ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .kpi-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .kpi-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .kpi-value.danger { color: var(--red); }
+    .kpi-value.warning { color: #e8a87c; }
+
+    .kpi-context {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--muted);
+    }
+
+    /* ── DASHBOARD PREVIEW ── */
+    .dashboard-wrap {
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .dashboard-wrap img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .dashboard-wrap:hover img { transform: scale(1.01); }
+
+    .dashboard-caption {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-align: center;
+      padding: 0.8rem;
+      border: 1px solid var(--border);
+      border-top: none;
+    }
+
+    /* ── FINDINGS ── */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .finding-card {
+      background: var(--surface);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .finding-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent2);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .finding-card:hover { background: var(--surface2); }
+    .finding-card:hover::before { transform: scaleX(1); }
+
+    .finding-category {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .finding-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .finding-body {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .finding-body strong { color: var(--accent); font-weight: 500; }
+    .finding-body .danger { color: var(--red); font-weight: 500; }
+
+    .finding-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--border);
+      line-height: 1;
+      margin-top: auto;
+    }
+
+    /* ── INSIGHTS ── */
+    .insights-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .insight-item {
+      background: var(--surface);
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 2rem;
+      transition: background 0.2s;
+    }
+
+    .insight-item:hover { background: var(--surface2); }
+
+    .insight-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .insight-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .insight-category {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .insight-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 0.8rem;
+    }
+
+    .insight-text {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .insight-text strong { color: var(--accent); font-weight: 500; }
+    .insight-text .danger { color: var(--red); font-weight: 500; }
+
+    /* ── PROCESS ── */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .process-card {
+      background: var(--surface);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: background 0.2s;
+    }
+
+    .process-card:hover { background: var(--surface2); }
+
+    .process-phase {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .process-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .process-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── DELIVERABLE ── */
+    .deliverable-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      padding: 2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+    }
+
+    .deliverable-card:hover { background: var(--surface2); }
+
+    .deliverable-icon {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--accent2);
+      line-height: 1;
+    }
+
+    .deliverable-content { flex: 1; }
+
+    .deliverable-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.5rem;
+    }
+
+    .deliverable-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .deliverable-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .deliverable-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: gap 0.2s;
+    }
+
+    .deliverable-link:hover { gap: 0.8rem; }
+
+    /* ── DATA NOTE ── */
+    .data-note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      padding: 1.5rem 2rem;
+      margin-top: 2rem;
+    }
+
+    .data-note-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+
+    .data-note p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 8vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent); }
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    .footer-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 640px) {
+      .insight-item { grid-template-columns: 1fr; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<header>
+  <div class="hero-tag">Python · Pandas · Tableau · 85,000+ Trip Records</div>
+  <h1>Logistics<br/><span class="accent">Operations</span><br/>Performance Analysis</h1>
+
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-label">Dataset</span>
+      <span class="meta-value">14 Tables · 85K+ Records</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Tools</span>
+      <span class="meta-value">Python · Tableau</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Focus</span>
+      <span class="meta-value">Fleet · Driver · Route</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Completed</span>
+      <span class="meta-value">Q2 2026</span>
+    </div>
+  </div>
+
+  <p class="hero-bio">An end-to-end Python analytics pipeline across 14 relational tables and 85,000+ trip records — analysing driver performance, route profitability, and fleet health for a logistics operator running at less than 60% of the industry on-time benchmark.</p>
+
+  <div class="badge-row">
+    <span class="badge badge-python">Python</span>
+    <span class="badge badge-pandas">Pandas</span>
+    <span class="badge badge-tableau">Tableau</span>
+    <span class="badge badge-complete">Complete</span>
+  </div>
+
+  <div class="hero-links">
+    <a class="hero-link" href="https://github.com/HarjiiBoss/logistics-analysis" target="_blank">GitHub Repo</a>
+    <a class="hero-link" href="https://public.tableau.com/app/profile/taofeek.salami/viz/LogisticsOperation/LogisticsOperationsDashboard?publish=yes" target="_blank">Live Dashboard</a>
+    <a class="hero-link" href="https://harjiiboss.github.io" target="_blank">Portfolio</a>
+  </div>
+
+  <div class="scroll-hint">Scroll to explore</div>
+</header>
+
+<main>
+
+  <!-- ═══ PERFORMANCE SNAPSHOT ═══ -->
+  <section>
+    <div class="section-label reveal">Performance Snapshot</div>
+    <h2 class="reveal">Key Metrics at a Glance</h2>
+
+    <div class="kpi-grid reveal">
+      <div class="kpi-card">
+        <div class="kpi-label">Fleet On-Time Rate</div>
+        <div class="kpi-value danger">55.7%</div>
+        <div class="kpi-context">vs. 95%+ industry benchmark</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Maintenance Spend</div>
+        <div class="kpi-value warning">$5.7M</div>
+        <div class="kpi-context">across all tracked vehicles</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Top Driver On-Time</div>
+        <div class="kpi-value">58.8%</div>
+        <div class="kpi-context">DRV00108 — fleet best</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Best Route Margin</div>
+        <div class="kpi-value">85.3%</div>
+        <div class="kpi-context">RTE00044 — most profitable</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Worst Route Margin</div>
+        <div class="kpi-value danger">–609%</div>
+        <div class="kpi-context">RTE00010 — urgent review</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Highest Maint. Cost</div>
+        <div class="kpi-value warning">$0.06/mi</div>
+        <div class="kpi-context">TRK00040 — top burden</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <section>
+    <div class="section-label reveal">Interactive Dashboard</div>
+    <h2 class="reveal">Built in Tableau Public</h2>
+    <div class="dashboard-wrap reveal">
+      <img src="https://raw.githubusercontent.com/HarjiiBoss/logistics-analysis/main/dashboard/dashboard_preview.png" alt="Logistics Operations Fleet Dashboard" />
+    </div>
+    <div class="dashboard-caption reveal">Fleet Operations Dashboard — Driver · Route · Fleet Health · Q2 2026 Capstone Analysis</div>
+
+    <div class="deliverable-card reveal">
+      <div class="deliverable-icon">↗</div>
+      <div class="deliverable-content">
+        <div class="deliverable-label">Live Tableau Dashboard</div>
+        <div class="deliverable-title">Logistics Operations Dashboard</div>
+        <div class="deliverable-desc">Interactive Tableau Public dashboard covering fleet on-time rate, driver ranking, route profitability, and maintenance cost per mile. Filterable by driver, route, and vehicle.</div>
+        <a class="deliverable-link" href="https://public.tableau.com/app/profile/taofeek.salami/viz/LogisticsOperation/LogisticsOperationsDashboard?publish=yes" target="_blank">View Live Dashboard →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ KEY FINDINGS ═══ -->
+  <section>
+    <div class="section-label reveal">Analysis</div>
+    <h2 class="reveal">What the Data Reveals</h2>
+
+    <div class="findings-grid reveal">
+
+      <div class="finding-card">
+        <div class="finding-category">Fleet Performance</div>
+        <div class="finding-title">55.7% On-Time Rate — Systemic Delivery Failure</div>
+        <div class="finding-body">The fleet's average on-time delivery rate of <strong>55.7%</strong> sits nearly <strong>40 percentage points below</strong> the 95%+ industry benchmark. With 44% of trips missing deadlines, this is not an isolated driver issue — it signals a systemic operational problem requiring root cause investigation.</div>
+        <div class="finding-number">01</div>
+      </div>
+
+      <div class="finding-card">
+        <div class="finding-category">Driver Performance</div>
+        <div class="finding-title">DRV00108 Leads the Fleet at 58.8% — Still Below Benchmark</div>
+        <div class="finding-body">The fleet's top-performing driver, <strong>DRV00108</strong>, achieves a <strong>58.8%</strong> on-time rate, closely followed by DRV00038 at 58.7%. Even the best performers sit well below industry standard, suggesting structural factors — routing, scheduling, or vehicle reliability — rather than individual capability are the primary constraint.</div>
+        <div class="finding-number">02</div>
+      </div>
+
+      <div class="finding-card">
+        <div class="finding-category">Route Profitability</div>
+        <div class="finding-title">RTE00044 Delivers 85.3% Margin — Top Expansion Candidate</div>
+        <div class="finding-body"><strong>RTE00044</strong> is the most profitable route at <strong>85.3% margin</strong>, followed by RTE00016 at 84.9% and RTE00012 at 83.8%. These routes represent the strongest candidates for volume expansion and should be used as benchmarks when optimising underperforming routes.</div>
+        <div class="finding-number">03</div>
+      </div>
+
+      <div class="finding-card">
+        <div class="finding-category">Route Risk</div>
+        <div class="finding-title">RTE00010 at –609% Margin — Pricing or Data Quality Issue</div>
+        <div class="finding-body"><strong>RTE00010</strong> is operating at a <span class="danger">–609% profit margin</span> — a mathematically extreme result that warrants immediate investigation. This could indicate a pricing error, data entry fault, or a structurally unviable route absorbing disproportionate cost without revenue offset.</div>
+        <div class="finding-number">04</div>
+      </div>
+
+      <div class="finding-card">
+        <div class="finding-category">Fleet Health</div>
+        <div class="finding-title">TRK00040 Carries the Highest Maintenance Burden at $0.06/mile</div>
+        <div class="finding-body"><strong>TRK00040</strong>, <strong>TRK00026</strong>, and <strong>TRK00014</strong> are the three highest-cost vehicles at <strong>$0.060/mile</strong> each. These vehicles collectively represent the top of a maintenance cost distribution that totals <strong>$5.7M</strong> across the fleet — a spend level that demands structured review and potential early retirement decisions.</div>
+        <div class="finding-number">05</div>
+      </div>
+
+      <div class="finding-card">
+        <div class="finding-category">Data Scope</div>
+        <div class="finding-title">14 Relational Tables · 85,000+ Trip Records Processed</div>
+        <div class="finding-body">The analysis pipeline ingested <strong>14 relational tables</strong> covering trips, drivers, routes, vehicles, maintenance logs, and cost records. Null handling, foreign key validation, and data type correction were completed across three structured notebooks before analysis began.</div>
+        <div class="finding-number">06</div>
+      </div>
+
+    </div>
+
+    <div class="data-note reveal">
+      <div class="data-note-label">Analytical Flag</div>
+      <p>RTE00010's –609% margin should be treated as unresolved until the underlying cause is confirmed. If this reflects a data entry error, the route's true performance may be acceptable. If it reflects real cost and revenue figures, the route requires immediate commercial review and potential suspension.</p>
+    </div>
+  </section>
+
+  <!-- ═══ INSIGHTS ═══ -->
+  <section>
+    <div class="section-label reveal">Business Insights</div>
+    <h2 class="reveal">Structured Analytical Insights</h2>
+
+    <div class="insights-list reveal">
+
+      <div class="insight-item">
+        <div class="insight-left">
+          <div class="insight-number">01</div>
+          <div class="insight-category">Fleet Performance</div>
+        </div>
+        <div class="insight-right">
+          <div class="insight-title">44% of Trips Miss Deadlines — A Structural Problem, Not a Driver Problem</div>
+          <div class="insight-text">A <strong>55.7% on-time rate</strong> against a 95%+ industry standard means nearly half of all trips are delivered late. Critically, even the best-performing driver in the fleet peaks at 58.8% — suggesting the ceiling on individual performance is constrained by factors outside driver control. Root cause investigation should prioritise routing efficiency, scheduling windows, and vehicle reliability before focusing on driver-level intervention.</div>
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-left">
+          <div class="insight-number">02</div>
+          <div class="insight-category">Route Strategy</div>
+        </div>
+        <div class="insight-right">
+          <div class="insight-title">High-Margin Routes Warrant Expansion — RTE00010 Requires Immediate Audit</div>
+          <div class="insight-text">Routes RTE00044, RTE00016, and RTE00012 collectively deliver margins above 83%, representing the business's strongest commercial assets. These routes should receive priority resourcing — top drivers, well-maintained vehicles, and optimised scheduling. Simultaneously, <span class="danger">RTE00010's –609% margin</span> demands an immediate audit to determine whether the figure reflects a data fault or a genuinely loss-making operation.</div>
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-left">
+          <div class="insight-number">03</div>
+          <div class="insight-category">Maintenance Risk</div>
+        </div>
+        <div class="insight-right">
+          <div class="insight-title">$5.7M Maintenance Spend Concentrated in Highest-Cost Vehicles</div>
+          <div class="insight-text">Total fleet maintenance spend of <strong>$5.7M</strong> is disproportionately concentrated in a small number of high-cost vehicles — TRK00040, TRK00026, and TRK00014 each reaching <strong>$0.060/mile</strong>. A structured review should assess whether the operational value of these vehicles justifies continued maintenance investment or whether early retirement and replacement would reduce total fleet cost.</div>
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-left">
+          <div class="insight-number">04</div>
+          <div class="insight-category">Driver Development</div>
+        </div>
+        <div class="insight-right">
+          <div class="insight-title">Replicate Best Practices from DRV00108 and DRV00038 Across the Fleet</div>
+          <div class="insight-text"><strong>DRV00108</strong> (58.8%) and <strong>DRV00038</strong> (58.7%) represent the fleet's performance ceiling. Understanding what distinguishes these drivers — route familiarity, scheduling habits, vehicle preferences — and systematically applying those practices to lower-performing drivers offers a near-term lever for improving fleet-wide on-time delivery without infrastructure investment.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ PROCESS ═══ -->
+  <section>
+    <div class="section-label reveal">Methodology</div>
+    <h2 class="reveal">3-Notebook Analytical Pipeline</h2>
+
+    <div class="process-grid reveal">
+      <div class="process-card">
+        <div class="process-phase">Notebook 01</div>
+        <div class="process-title">Data Exploration</div>
+        <div class="process-desc">Loaded all 14 tables from raw CSV files. Checked null distribution, verified foreign key relationships across tables, assessed data types and row counts.</div>
+      </div>
+      <div class="process-card">
+        <div class="process-phase">Notebook 02</div>
+        <div class="process-title">Data Cleaning</div>
+        <div class="process-desc">Fixed null values, converted data types, standardised categorical fields, and exported clean CSVs for analysis. All cleaning decisions documented inline.</div>
+      </div>
+      <div class="process-card">
+        <div class="process-phase">Notebook 03</div>
+        <div class="process-title">Analysis</div>
+        <div class="process-desc">Computed driver on-time rates, route profit margins, fleet maintenance cost per mile. Surfaced top and bottom performers across all three operational dimensions.</div>
+      </div>
+      <div class="process-card">
+        <div class="process-phase">Tableau</div>
+        <div class="process-title">Dashboard Build</div>
+        <div class="process-desc">Packaged analysis outputs into an interactive Tableau Public dashboard with driver ranking, route profitability, and fleet maintenance views.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <span class="footer-name">Taofeek Salami</span>
+  <div class="footer-links">
+    <a class="footer-link" href="https://linkedin.com/in/taofeek-salami-460a93245" target="_blank">LinkedIn</a>
+    <a class="footer-link" href="https://github.com/HarjiiBoss" target="_blank">GitHub</a>
+    <a class="footer-link" href="mailto:salamitaofeek92@gmail.com">Email</a>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
