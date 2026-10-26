@@ -634,7 +634,7 @@
     </div>
   </div>
 
-  <p class="hero-bio">An end-to-end Python analytics pipeline across 14 relational tables and 85,000+ trip records — analysing driver performance, route profitability, and fleet health for a logistics operator running at less than 60% of the industry on-time benchmark.</p>
+  <p class="hero-bio">An end-to-end Python analytics pipeline across 14 relational tables and 85,000+ trip records — analysing on-time delivery, route margin after fuel, and fleet maintenance cost. Fewer than half of deliveries arrived on time, and no driver stood out from the rest by more than chance.</p>
 
   <div class="badge-row">
     <span class="badge badge-python">Python</span>
@@ -661,34 +661,34 @@
 
     <div class="kpi-grid reveal">
       <div class="kpi-card">
-        <div class="kpi-label">Fleet On-Time Rate</div>
-        <div class="kpi-value danger">55.7%</div>
-        <div class="kpi-context">vs. 95%+ industry benchmark</div>
+        <div class="kpi-label">On-Time Delivery Rate</div>
+        <div class="kpi-value danger">44.6%</div>
+        <div class="kpi-context">deliveries only; pickups 66.7%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Driver Range</div>
+        <div class="kpi-value">37.6–50.0%</div>
+        <div class="kpi-context">124 drivers; not significant (p = 0.41)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Route Margin After Fuel</div>
+        <div class="kpi-value">59–78%</div>
+        <div class="kpi-context">58 routes; median 72.0%</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Total Maintenance Spend</div>
         <div class="kpi-value warning">$5.7M</div>
-        <div class="kpi-context">across all tracked vehicles</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Top Driver On-Time</div>
-        <div class="kpi-value">58.8%</div>
-        <div class="kpi-context">DRV00108 — fleet best</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Best Route Margin</div>
-        <div class="kpi-value">85.3%</div>
-        <div class="kpi-context">RTE00044 — most profitable</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Worst Route Margin</div>
-        <div class="kpi-value danger">–609%</div>
-        <div class="kpi-context">RTE00010 — urgent review</div>
+        <div class="kpi-context">across 120 trucks</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Highest Maint. Cost</div>
         <div class="kpi-value warning">$0.06/mi</div>
-        <div class="kpi-context">TRK00040 — top burden</div>
+        <div class="kpi-context">TRK00040; fleet median $0.037</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Fuel Efficiency</div>
+        <div class="kpi-value">6.45–6.57</div>
+        <div class="kpi-context">MPG range across all drivers</div>
       </div>
     </div>
   </section>
@@ -707,7 +707,7 @@
       <div class="deliverable-content">
         <div class="deliverable-label">Live Tableau Dashboard</div>
         <div class="deliverable-title">Logistics Operations Dashboard</div>
-        <div class="deliverable-desc">Interactive Tableau Public dashboard covering fleet on-time rate, driver ranking, route profitability, and maintenance cost per mile. Filterable by driver, route, and vehicle.</div>
+        <div class="deliverable-desc">Interactive Tableau Public dashboard covering on-time delivery, driver comparison, route margin after fuel, and maintenance cost per mile. Filterable by driver, route, and vehicle.</div>
         <a class="deliverable-link" href="https://public.tableau.com/app/profile/taofeek.salami/viz/LogisticsOperation/LogisticsOperationsDashboard?publish=yes" target="_blank">View Live Dashboard →</a>
       </div>
     </div>
@@ -726,44 +726,44 @@
     <div class="findings-grid reveal">
 
       <div class="finding-card">
-        <div class="finding-category">Fleet Performance</div>
-        <div class="finding-title">55.7% On-Time Rate — Systemic Delivery Failure</div>
-        <div class="finding-body">The fleet's average on-time delivery rate of <strong>55.7%</strong> sits nearly <strong>40 percentage points below</strong> the 95%+ industry benchmark. With 44% of trips missing deadlines, this is not an isolated driver issue — it signals a systemic operational problem requiring root cause investigation.</div>
+        <div class="finding-category">Delivery Reliability</div>
+        <div class="finding-title">Fewer Than Half of Deliveries Arrive On Time</div>
+        <div class="finding-body">Only <strong>44.6%</strong> of deliveries met their scheduled time, against <strong>66.7%</strong> of pickups. The 55.7% reported earlier combines the two; deliveries run late far more often than pickups.</div>
         <div class="finding-number">01</div>
       </div>
 
       <div class="finding-card">
         <div class="finding-category">Driver Performance</div>
-        <div class="finding-title">DRV00108 Leads the Fleet at 58.8% — Still Below Benchmark</div>
-        <div class="finding-body">The fleet's top-performing driver, <strong>DRV00108</strong>, achieves a <strong>58.8%</strong> on-time rate, closely followed by DRV00038 at 58.7%. Even the best performers sit well below industry standard, suggesting structural factors — routing, scheduling, or vehicle reliability — rather than individual capability are the primary constraint.</div>
+        <div class="finding-title">No Driver Stands Out From the Rest</div>
+        <div class="finding-body">Driver on-time delivery rates range from 37.6% to 50.0% across 124 drivers with about 650 deliveries each. A chi-square test gives <strong>p = 0.413</strong>: the spread is what chance alone would produce, so the data cannot single out better or worse drivers.</div>
         <div class="finding-number">02</div>
       </div>
 
       <div class="finding-card">
         <div class="finding-category">Route Profitability</div>
-        <div class="finding-title">RTE00044 Delivers 85.3% Margin — Top Expansion Candidate</div>
-        <div class="finding-body"><strong>RTE00044</strong> is the most profitable route at <strong>85.3% margin</strong>, followed by RTE00016 at 84.9% and RTE00012 at 83.8%. These routes represent the strongest candidates for volume expansion and should be used as benchmarks when optimising underperforming routes.</div>
+        <div class="finding-title">Every Route Keeps 59–78% of Revenue After Fuel</div>
+        <div class="finding-body">With fuel estimated from gallons used on each trip, margin after fuel runs from <strong>59.2%</strong> (RTE00037) to <strong>77.7%</strong> (RTE00015), median 72.0%. No route loses money on fuel; driver pay, maintenance and other costs are not in the data at route level.</div>
         <div class="finding-number">03</div>
       </div>
 
       <div class="finding-card">
-        <div class="finding-category">Route Risk</div>
-        <div class="finding-title">RTE00010 at –609% Margin — Pricing or Data Quality Issue</div>
-        <div class="finding-body"><strong>RTE00010</strong> is operating at a <span class="danger">–609% profit margin</span> — a mathematically extreme result that warrants immediate investigation. This could indicate a pricing error, data entry fault, or a structurally unviable route absorbing disproportionate cost without revenue offset.</div>
+        <div class="finding-category">Data Quality</div>
+        <div class="finding-title">Fuel Purchase Records Cannot Cost Individual Trips</div>
+        <div class="finding-body">Fuel purchases are linked to trips, but their cost per trip has <strong>no relationship with trip distance</strong> (correlation 0.00), while gallons used tracks distance closely (0.98). Using the purchase link had produced a false <strong>–609%</strong> margin on a 94-mile route; the analysis now uses gallons used.</div>
         <div class="finding-number">04</div>
       </div>
 
       <div class="finding-card">
         <div class="finding-category">Fleet Health</div>
-        <div class="finding-title">TRK00040 Carries the Highest Maintenance Burden at $0.06/mile</div>
-        <div class="finding-body"><strong>TRK00040</strong>, <strong>TRK00026</strong>, and <strong>TRK00014</strong> are the three highest-cost vehicles at <strong>$0.060/mile</strong> each. These vehicles collectively represent the top of a maintenance cost distribution that totals <strong>$5.7M</strong> across the fleet — a spend level that demands structured review and potential early retirement decisions.</div>
+        <div class="finding-title">Maintenance Spend Is Spread Across the Fleet</div>
+        <div class="finding-body">Maintenance totals <strong>$5.7M</strong> across 120 trucks. The costliest 10% of trucks account for 15.2% of spend, close to an even share. TRK00040, TRK00026 and TRK00014 have the highest cost per mile at about <strong>$0.06</strong>, against a median of $0.037.</div>
         <div class="finding-number">05</div>
       </div>
 
       <div class="finding-card">
         <div class="finding-category">Data Scope</div>
         <div class="finding-title">14 Relational Tables · 85,000+ Trip Records Processed</div>
-        <div class="finding-body">The analysis pipeline ingested <strong>14 relational tables</strong> covering trips, drivers, routes, vehicles, maintenance logs, and cost records. Null handling, foreign key validation, and data type correction were completed across three structured notebooks before analysis began.</div>
+        <div class="finding-body">The pipeline covered trips, loads, drivers, routes, trucks, delivery events, fuel purchases and maintenance records. 80,458 trips remained after cleaning; every driver's fuel efficiency falls between 6.45 and 6.57 MPG.</div>
         <div class="finding-number">06</div>
       </div>
 
@@ -771,7 +771,7 @@
 
     <div class="data-note reveal">
       <div class="data-note-label">Analytical Flag</div>
-      <p>RTE00010's –609% margin should be treated as unresolved until the underlying cause is confirmed. If this reflects a data entry error, the route's true performance may be acceptable. If it reflects real cost and revenue figures, the route requires immediate commercial review and potential suspension.</p>
+      <p>Fuel purchase costs do not match the trips they are linked to, so the fuel join was checked against gallons used, an independent measure, before route margins were reported. The other figures come from single tables or joins on trip and load IDs.</p>
     </div>
   </section>
 
@@ -785,11 +785,11 @@
       <div class="insight-item">
         <div class="insight-left">
           <div class="insight-number">01</div>
-          <div class="insight-category">Fleet Performance</div>
+          <div class="insight-category">Delivery Reliability</div>
         </div>
         <div class="insight-right">
-          <div class="insight-title">44% of Trips Miss Deadlines — A Structural Problem, Not a Driver Problem</div>
-          <div class="insight-text">A <strong>55.7% on-time rate</strong> against a 95%+ industry standard means nearly half of all trips are delivered late. Critically, even the best-performing driver in the fleet peaks at 58.8% — suggesting the ceiling on individual performance is constrained by factors outside driver control. Root cause investigation should prioritise routing efficiency, scheduling windows, and vehicle reliability before focusing on driver-level intervention.</div>
+          <div class="insight-title">Investigate Late Deliveries by Route, Facility and Time Window</div>
+          <div class="insight-text">Pickups are on time two-thirds of the time; deliveries less than half. Because drivers do not differ by more than chance, the next step is to compare late and on-time deliveries by route, distance, facility and scheduled window.</div>
         </div>
       </div>
 
@@ -799,30 +799,30 @@
           <div class="insight-category">Route Strategy</div>
         </div>
         <div class="insight-right">
-          <div class="insight-title">High-Margin Routes Warrant Expansion — RTE00010 Requires Immediate Audit</div>
-          <div class="insight-text">Routes RTE00044, RTE00016, and RTE00012 collectively deliver margins above 83%, representing the business's strongest commercial assets. These routes should receive priority resourcing — top drivers, well-maintained vehicles, and optimised scheduling. Simultaneously, <span class="danger">RTE00010's –609% margin</span> demands an immediate audit to determine whether the figure reflects a data fault or a genuinely loss-making operation.</div>
+          <div class="insight-title">Rank Routes on Full Cost Before Changing Prices</div>
+          <div class="insight-text">Margin after fuel varies from 59% to 78%, so no route is losing money on fuel alone. A pricing review needs driver pay, tolls and maintenance by route; until then the 18-point spread is the only route-level signal.</div>
         </div>
       </div>
 
       <div class="insight-item">
         <div class="insight-left">
           <div class="insight-number">03</div>
-          <div class="insight-category">Maintenance Risk</div>
+          <div class="insight-category">Maintenance</div>
         </div>
         <div class="insight-right">
-          <div class="insight-title">$5.7M Maintenance Spend Concentrated in Highest-Cost Vehicles</div>
-          <div class="insight-text">Total fleet maintenance spend of <strong>$5.7M</strong> is disproportionately concentrated in a small number of high-cost vehicles — TRK00040, TRK00026, and TRK00014 each reaching <strong>$0.060/mile</strong>. A structured review should assess whether the operational value of these vehicles justifies continued maintenance investment or whether early retirement and replacement would reduce total fleet cost.</div>
+          <div class="insight-title">Review the Highest Cost-per-Mile Trucks Individually</div>
+          <div class="insight-text">Spend is not concentrated in a few vehicles, so fleet-wide changes would affect most trucks. TRK00040, TRK00026 and TRK00014 run at about $0.06 per mile against a $0.037 median and are the first candidates for a replacement-versus-repair review.</div>
         </div>
       </div>
 
       <div class="insight-item">
         <div class="insight-left">
           <div class="insight-number">04</div>
-          <div class="insight-category">Driver Development</div>
+          <div class="insight-category">Data Governance</div>
         </div>
         <div class="insight-right">
-          <div class="insight-title">Replicate Best Practices from DRV00108 and DRV00038 Across the Fleet</div>
-          <div class="insight-text"><strong>DRV00108</strong> (58.8%) and <strong>DRV00038</strong> (58.7%) represent the fleet's performance ceiling. Understanding what distinguishes these drivers — route familiarity, scheduling habits, vehicle preferences — and systematically applying those practices to lower-performing drivers offers a near-term lever for improving fleet-wide on-time delivery without infrastructure investment.</div>
+          <div class="insight-title">Fix the Link Between Fuel Purchases and Trips</div>
+          <div class="insight-text">Fuel card purchases cannot currently be traced to the trips they fuelled. Recording the trip or truck correctly at purchase would allow actual fuel cost per route and per driver, in place of the estimate used here.</div>
         </div>
       </div>
 
@@ -848,7 +848,7 @@
       <div class="process-card">
         <div class="process-phase">Notebook 03</div>
         <div class="process-title">Analysis</div>
-        <div class="process-desc">Computed driver on-time rates, route profit margins, fleet maintenance cost per mile. Surfaced top and bottom performers across all three operational dimensions.</div>
+        <div class="process-desc">Computed on-time delivery rates (deliveries only) and tested whether drivers differ, estimated route margin after fuel from gallons used, and calculated maintenance cost per mile.</div>
       </div>
       <div class="process-card">
         <div class="process-phase">Tableau</div>
