@@ -10,17 +10,17 @@ An end-to-end data analysis capstone project on a logistics operations database,
 
 Logistics operations depend on the interaction of three variables — delivery reliability, route profitability, and fleet maintenance cost — yet these are often analysed separately.
 
-This project consolidates a 14-table logistics database (85,000+ trip records) into a single analytical workflow to evaluate driver performance, route-level profitability, and fleet health, surfacing where operational or pricing issues may be eroding margin.
+This project consolidates a 14-table logistics database (85,000+ trip records) into a single analytical workflow to evaluate driver performance, route-level profitability, and fleet health, surfacing where operational issues may be eroding margin.
 
 ---
 
 ## Executive Summary
 
-The fleet's on-time delivery rate sits at **55.7%**, well below the 95%+ industry benchmark, indicating a systemic reliability gap rather than isolated underperformance.
+Only **44.6%** of deliveries arrived on time, against **66.7%** of pickups (55.7% across both). Driver on-time delivery rates range from 37.6% to 50.0%, and a chi-square test (p = 0.413) shows that spread is consistent with chance, so the delays are not explained by individual drivers.
 
-At the route level, profitability varies sharply: the top-performing route (**RTE00044**) delivers an **85.3% profit margin**, while the weakest (**RTE00010**) shows a **-609% margin** — a result significant enough to point to either a pricing error or a data-quality issue requiring investigation.
+With fuel cost estimated from gallons used on each trip, every route keeps **59–78%** of its revenue after fuel (median 72.0%). An earlier version reported a −609% margin on RTE00010; that came from fuel purchase records whose cost per trip has no relationship with trip distance, and it has been corrected.
 
-Maintenance spend across the fleet totals **$5.7M**, with cost concentrated in a small number of high-cost vehicles, led by **TRK00040** at **$0.06/mile**.
+Maintenance spend totals **$5.7M** across 120 trucks and is spread across the fleet: the costliest 10% of trucks account for 15.2% of spend. **TRK00040** has the highest cost per mile at about **$0.06**, against a median of $0.037.
 
 ---
 
@@ -28,35 +28,37 @@ Maintenance spend across the fleet totals **$5.7M**, with cost concentrated in a
 
 This project set out to answer:
 
-- How reliable is fleet delivery performance relative to industry benchmarks?
-- Which drivers and routes perform best — and worst — and why?
+- How reliable are pickups and deliveries?
+- Do drivers differ in on-time delivery, fuel efficiency and revenue per mile?
+- How much of each route's revenue remains after fuel?
 - Where is maintenance cost concentrated across the fleet?
-- Are there routes or vehicles whose numbers suggest a pricing or data-quality problem rather than genuine performance?
+- Are there figures that point to a data-quality problem rather than genuine performance?
 
 ---
 
 ## Key Findings
 
-**Fleet Performance**
-- Fleet on-time rate: **55.7%** vs. 95%+ industry benchmark
-- Top driver **DRV00108** achieves a **58.8%** on-time delivery rate
+**Delivery Reliability**
+- On-time delivery rate: **44.6%** (pickups **66.7%**; both together 55.7%)
+- Driver rates range from **37.6%** to **50.0%**; the differences are not statistically significant (chi-square p = 0.413)
+- Every driver's fuel efficiency is between **6.45** and **6.57** MPG
 
 **Route Profitability**
-- Most profitable route **RTE00044**: **85.3%** profit margin
-- **RTE00010** shows a **-609%** margin — flagged for pricing or data-quality review
+- Margin after fuel: **59.2%** (RTE00037) to **77.7%** (RTE00015), median **72.0%**
+- Fuel cost is estimated as gallons used × the average price ($3.899/gallon), because fuel purchase cost per trip does not track distance (correlation 0.00 vs 0.98 for gallons used)
 
 **Fleet Maintenance**
-- Total fleet maintenance spend: **$5.7M**
-- **TRK00040** has the highest maintenance cost at **$0.06/mile**
+- Total maintenance spend: **$5.7M** across 120 trucks; the top 10% of trucks account for 15.2%
+- **TRK00040** has the highest cost per mile at about **$0.06** (fleet median $0.037)
 
 ---
 
 ## Recommendations
 
-- **Investigate the fleet-wide on-time gap.** A 40-point shortfall against benchmark suggests a structural issue (scheduling, routing, or capacity) rather than isolated driver performance.
-- **Audit RTE00010 before drawing business conclusions.** A -609% margin is an outlier large enough to warrant a data-quality check before it's treated as a genuine pricing failure.
-- **Review high-cost vehicles like TRK00040** for maintenance patterns that could inform fleet replacement or preventive-maintenance scheduling.
-- **Study top performers (DRV00108, RTE00044)** to identify replicable practices behind above-benchmark reliability and margin.
+- **Investigate late deliveries by route, distance, facility and time window.** Drivers do not differ by more than chance, so the next comparison is by route and schedule rather than by driver.
+- **Add driver pay, tolls and maintenance by route before reviewing prices.** Margin after fuel is the only route-level measure the data supports.
+- **Review TRK00040, TRK00026 and TRK00014 individually** for repair-versus-replace decisions.
+- **Fix the link between fuel purchases and trips** so actual fuel cost can replace the estimate.
 
 ---
 
@@ -64,7 +66,7 @@ This project set out to answer:
 
 | Tool | Purpose |
 |---|---|
-| Python (pandas, matplotlib, seaborn) | Data cleaning and analysis |
+| Python (pandas, matplotlib, seaborn, SciPy) | Data cleaning, analysis and statistical testing |
 | Jupyter Notebook | Development environment |
 | Tableau Public | Interactive dashboard |
 | Git & GitHub | Version control |
