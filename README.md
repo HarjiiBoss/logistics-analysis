@@ -92,9 +92,14 @@ logistics-analysis/
 │   ├── 01_data_exploration.ipynb      ← Load all 14 tables, check nulls, verify FK relationships
 │   ├── 02_cleaning.ipynb              ← Fix nulls, convert data types, export clean CSVs
 │   └── 03_analysis.ipynb              ← Driver performance, route profitability, fleet health
-├── exports/                           ← Clean CSVs and chart PNGs
+├── exports/                           ← All 14 tables after 02_cleaning (three saved as *_clean.csv),
+│                                         analysis results (analysis_*.csv) and chart PNGs
 ├── dashboard/
+│   ├── logistics_dashboard.twbx       ← Tableau workbook
 │   └── dashboard_preview.png
+├── docs/
+│   └── index.html                     ← Project page
+├── LICENSE
 └── README.md
 ```
 
@@ -102,13 +107,36 @@ logistics-analysis/
 
 ## Dashboard
 
-🔗 [View Live Dashboard](https://public.tableau.com/app/profile/taofeek.salami/viz/LogisticsOperation/LogisticsOperationsDashboard?publish=yes)
+🔗 [View Live Dashboard](https://public.tableau.com/app/profile/taofeek.salami/viz/LogisticsOperation/LogisticsOperationsDashboard)
 
 ---
 
 ## Author
 
-**Salami Taofeek**
+**Taofeek Salami**
 Data Analyst | SQL | Python | Tableau
 
 GitHub: [HarjiiBoss](https://github.com/HarjiiBoss)
+
+---
+
+## Corrections
+
+**26 October 2026** (pull requests #1 and #2)
+
+- **On-time rate:** the earlier README reported a 55.7% "on-time delivery rate". That figure combined pickups and deliveries. Deliveries alone are 44.6% on time and pickups 66.7%; the README now reports each. The comparison with a "95%+ industry benchmark" was removed, because no source for it was recorded.
+- **Top driver:** DRV00108 (58.8%) was reported as the top driver. With deliveries measured on their own, driver rates range from 37.6% to 50.0%, and a chi-square test (p = 0.413) finds the spread consistent with chance, so no driver is singled out.
+- **Route margins:** route fuel cost had been taken from fuel purchase records, whose cost per trip has no relationship with trip distance. That produced a −609% margin on RTE00010 and an 85.3% margin on RTE00044. Fuel is now estimated as gallons used × the average price, and every route keeps 59.2% to 77.7% of its revenue after fuel.
+- **Dashboard, charts and project page** were rebuilt from the corrected analysis.
+
+## Published Surfaces
+
+Every place this project's findings appear outside this repository. When a figure changes, each one is updated and its date refreshed (Data Analysis Playbook v3.4, Published Surfaces).
+
+| Surface | Link | Figures quoted | Last checked |
+|---------|------|----------------|--------------|
+| Project page | [taofeeksalami.com/logistics-analysis](https://taofeeksalami.com/logistics-analysis) | Full findings | 29 Oct 2026 |
+| Tableau Public dashboard | [Logistics Operations Dashboard](https://public.tableau.com/app/profile/taofeek.salami/viz/LogisticsOperation/LogisticsOperationsDashboard) | Rebuilt after the 26 Oct corrections | 26 Oct 2026 |
+| Portfolio site card | [taofeeksalami.com](https://taofeeksalami.com) | 85,000+ trips, 44.6% on time, p = 0.41, −609% traced to the fuel join, 59–78% after fuel | 29 Oct 2026 |
+| GitHub profile README | [github.com/HarjiiBoss](https://github.com/HarjiiBoss) | 44.6%, p = 0.41, −609%, 59–78% (median 72.0%), $5.7M, 120 trucks, 15.2% | 29 Oct 2026 |
+| Resume | — | 85,000+ trips, 44.6%, p = 0.41, −609% | 29 Oct 2026 |
